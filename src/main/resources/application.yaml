@@ -1,0 +1,15 @@
+github:
+  repository: quarkusio/quarkus
+  labels:
+    - area/adr
+    - area/grpc
+    - area/kafka
+    - area/mailer
+    - area/mutiny
+    - area/mongo
+    - area/reactive-messaging
+    - area/reactive-sql-clients
+    - area/reactive-streams-operators
+    - area/reactive
+    - area/redis
+    - area/vertx

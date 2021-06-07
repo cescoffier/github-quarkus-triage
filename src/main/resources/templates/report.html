@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Triage - {date}</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="container">
+
+<h1>Triage report</h1>
+
+<p>Generation Date: {date}</p>
+<p>Number of issues: {count}</p>
+
+{#for item in issues}
+    <h2>{item.value.size} issues with label <code>{item.key}</code></h2>
+    <ul>
+        {#for issue in item.value}
+            <li><a href="{issue.url}">{issue.number} - {issue.title}</a>
+                {#if issue.assignee}<em>({issue.assignee})</em>{/if}
+                {#if issue.updated}<span class="badge badge-primary">Updated</span>{/if} {#if issue.stale}<span class="badge badge-warning">Staled?</span>{/if}
+                {#for label in issue.labels}
+                    {#if label is 'kind/bug'}
+                        <span class="badge badge-danger">{label}</span>
+                    {#else}
+                        <span class="badge badge-info">{label}</span>
+                    {/if}
+                {/for}
+            </li>
+        {/for}
+    </ul>
+
+    <hr/>
+{/for}
+
+</div>
+</body>
+</html>
