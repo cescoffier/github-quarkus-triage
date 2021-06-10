@@ -3,6 +3,7 @@ package me.escoffier.triage;
 import org.jboss.logging.Logger;
 import org.kohsuke.github.GHIssue;
 import org.kohsuke.github.GHLabel;
+import org.kohsuke.github.GHPullRequest;
 import org.kohsuke.github.GHUser;
 
 import java.io.IOException;
@@ -21,10 +22,13 @@ public class Issue {
     public final boolean updated;
     public final boolean stale;
 
+    public final boolean isPR;
+    public final boolean isDraft;
+
     public final List<String> labels;
     public final String assignee;
 
-    public Issue(GHIssue issue) {
+    public Issue(GHIssue issue, GHPullRequest pr) {
         this.title = issue.getTitle();
         this.url = issue.getHtmlUrl().toExternalForm();
         this.number = issue.getNumber();
@@ -47,6 +51,12 @@ public class Issue {
                 .filter(s -> ! s.startsWith("pinned"))
                 .collect(Collectors.toList());
 
+        isPR = issue.isPullRequest();
+        if (pr != null) {
+            isDraft = get("draft", this.url, pr::isDraft).orElse(false);
+        } else {
+            isDraft = false;
+        }
     }
 
     private <T> Optional<T> get(String attribute, String issue, ThrowingSupplier<T> supplier) {
