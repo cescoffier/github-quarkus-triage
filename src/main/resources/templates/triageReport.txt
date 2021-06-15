@@ -1,0 +1,15 @@
+# Triage report
+
+Generation Date: {date}  
+Number of issues: {count}
+
+{#for item in issues}
+## {item.value.size} issues with label `{item.key}`
+
+{#for issue in item.value}
+* {#if issue.isPR}⤴️{#else}🧾{/if} [{issue.number}: {issue.title}]({issue.url}) {#if issue.assignee}*({issue.assignee})*{/if}  
+    {#for label in issue.labels}{#when label}{#is 'kind/bug'}🐛{#is 'triage/needs-triage'}👀{#is 'triage/backport?'}🔙{#is 'kind/enhancement'}🎁{/when} {label}, {/for} {#if issue.isDraft}✏️ Draft{/if} {#if issue.updated}✨ Updated{/if} {#if issue.stale}🥺
+    Stale?{/if}
+{/for}
+
+{/for}
