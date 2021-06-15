@@ -25,7 +25,7 @@ public class TriageCommand implements Runnable {
     @ConfigProperty(name = "github.repository")
     String repository;
 
-    @CommandLine.Option(names = "-o", description = "Output HTML file", defaultValue = "triage.html")
+    @CommandLine.Option(names = "-o", description = "Output file", defaultValue = "triage.html")
     String output;
 
     @Inject
@@ -68,8 +68,16 @@ public class TriageCommand implements Runnable {
 
     private void generateReport(Map<String, List<Issue>> issues) throws IOException {
         long count = issues.values().stream().mapToLong(Collection::size).sum();
-        String content = Templates.report(issues, count, new SimpleDateFormat("dd-MM-yyyy").format(new Date()))
+        final String content;
+
+        if ( output.endsWith(".md")) {
+            content = Templates.triageReport(issues, count, new SimpleDateFormat("dd-MM-yyyy").format(new Date()))
+                    .render();
+        } else {
+            content = Templates.report(issues, count, new SimpleDateFormat("dd-MM-yyyy").format(new Date()))
                 .render();
+        }
+
         File out = new File(output);
         Files.write(out.toPath(), content.getBytes(StandardCharsets.UTF_8));
         LOGGER.infof("\uD83C\uDF7B  Report generated: %s", out.getAbsolutePath());

@@ -10,4 +10,6 @@ import java.util.Map;
 @CheckedTemplate
 public class Templates {
     public static native TemplateInstance report(Map<String, List<Issue>> issues, long count, String date);
+
+    public static native TemplateInstance triageReport(Map<String, List<Issue>> issues, long count, String date);
 }
