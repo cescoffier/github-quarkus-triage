@@ -8,8 +8,7 @@ Number of issues: {count}
 
 {#for issue in item.value}
 * {#if issue.isPR}⤴️{#else}🧾{/if} [{issue.number}: {issue.title}]({issue.url}) {#if issue.assignee}*({issue.assignee})*{/if}  
-    {#for label in issue.labels}{#when label}{#is 'kind/bug'}🐛{#is 'triage/needs-triage'}👀{#is 'triage/backport?'}🔙{#is 'kind/enhancement'}🎁{/when} {label}, {/for} {#if issue.isDraft}✏️ Draft{/if} {#if issue.updated}✨ Updated{/if} {#if issue.stale}🥺
-    Stale?{/if}
+    {#for label in issue.labels}{#when label}{#is 'kind/bug'}🐛{#is 'kind/enhancement'}🎁{#is 'kind/epic'}🗃{#is 'triage/backport?'}🔙{#is 'triage/needs-triage'}👀{#is 'triage/needs-review'}👀{/when} {label}, {/for} {#if issue.isDraft}✏️ Draft{/if} {#if issue.updated}✨ Updated{/if} {#if issue.stale}🥺 Stale?{/if}
 {/for}
 
 {/for}
