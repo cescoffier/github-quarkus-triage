@@ -27,29 +27,32 @@
 <p>Generation Date: {date}</p>
 <p>Number of issues: {count}</p>
 
-{#for item in issues}
-    <h2>{item.value.size} issues with label <code>{item.key}</code></h2>
+{#for project in projects}
+    <h2>{project.name}</h2>
+    {#for item in project.issues}
+    <h4>{item.value.size} issues {#if item.key != 'all'}with label <code>{item.key}</code>{/if}</h4>
     <ul>
         {#for issue in item.value}
-            <li>
-                <a href="{issue.url}">
-                    {#if issue.isPR}<span class="pr">&nbsp;</span>{/if}
-                    {issue.number} - {issue.title}
-                </a>
-                {#if issue.assignee}<em>({issue.assignee})</em>{/if}
-                {#if issue.isDraft}<span class="badge badge-default">Draft</span>{/if}
-                {#if issue.updated}<span class="badge badge-primary">Updated</span>{/if} {#if issue.stale}<span class="badge badge-warning">Staled?</span>{/if}
-                {#for label in issue.labels}
-                    {#if label is 'kind/bug'}
-                        <span class="badge badge-danger">{label}</span>
-                    {#else}
-                        <span class="badge badge-info">{label}</span>
-                    {/if}
-                {/for}
-            </li>
+        <li>
+            <a href="{issue.url}">
+                {#if issue.isPR}<span class="pr">&nbsp;</span>{/if}
+                {issue.number} - {issue.title}
+            </a>
+            {#if issue.assignee}<em>({issue.assignee})</em>{/if}
+            {#if issue.isDraft}<span class="badge badge-default">Draft</span>{/if}
+            {#if issue.updated}<span class="badge badge-primary">Updated</span>{/if} {#if issue.stale}<span class="badge badge-warning">Staled?</span>{/if}
+            {#for label in issue.labels}
+            {#if label is 'kind/bug'}
+            <span class="badge badge-danger">{label}</span>
+            {#else}
+            <span class="badge badge-info">{label}</span>
+            {/if}
+            {/for}
+        </li>
         {/for}
     </ul>
 
+    {/for}
     <hr/>
 {/for}
 

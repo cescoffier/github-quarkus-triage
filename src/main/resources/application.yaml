@@ -1,15 +1,27 @@
 github:
-  repository: quarkusio/quarkus
-  labels:
-    - area/adr
-    - area/grpc
-    - area/kafka
-    - area/mailer
-    - area/mutiny
-    - area/mongo
-    - area/reactive-messaging
-    - area/reactive-sql-clients
-    - area/reactive-streams-operators
-    - area/reactive
-    - area/redis
-    - area/vertx
+
+  repositories:
+    - repository: quarkusio/quarkus
+      labels:
+        - area/adr
+        - area/grpc
+        - area/kafka
+        - area/mailer
+        - area/mutiny
+        - area/mongo
+        - area/reactive-messaging
+        - area/reactive-sql-clients
+        - area/reactive-streams-operators
+        - area/reactive
+        - area/redis
+        - area/vertx
+      exclude-labels:
+        - kind/extension-proposal
+      hide-labels:
+        - pinned
+        - "area/.*"
+
+    - repository: smallrye/smallrye-reactive-messaging
+      exclude-labels:
+        - help wanted
+    - repository: smallrye/smallrye-mutiny

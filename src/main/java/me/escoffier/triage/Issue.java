@@ -8,9 +8,8 @@ import org.kohsuke.github.GHUser;
 
 import java.io.IOException;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Issue {
@@ -28,7 +27,7 @@ public class Issue {
     public final List<String> labels;
     public final String assignee;
 
-    public Issue(GHIssue issue, GHPullRequest pr) {
+    public Issue(TriageConfig.Repository repository, GHIssue issue, GHPullRequest pr) {
         this.title = issue.getTitle();
         this.url = issue.getHtmlUrl().toExternalForm();
         this.number = issue.getNumber();
@@ -45,10 +44,10 @@ public class Issue {
         Optional<String> assignee = get("assignee", this.url, issue::getAssignee)
                 .flatMap(gh -> get("name", this.url, gh::getName));
         this.assignee = assignee.orElse(null);
+
         this.labels = issue.getLabels().stream()
                 .map(GHLabel::getName)
-                .filter(s -> ! s.startsWith("area/"))
-                .filter(s -> ! s.startsWith("pinned"))
+                .filter(s -> ! isHidden(repository, s))
                 .collect(Collectors.toList());
 
         isPR = issue.isPullRequest();
@@ -57,6 +56,15 @@ public class Issue {
         } else {
             isDraft = false;
         }
+    }
+
+    private boolean isHidden(TriageConfig.Repository repository, String s) {
+        List<Pattern> list = repository.hideLabels().orElse(Collections.emptyList());
+        for (Pattern p : list) {
+            if (p.matcher(s).matches())
+                return true;
+        }
+        return false;
     }
 
     private <T> Optional<T> get(String attribute, String issue, ThrowingSupplier<T> supplier) {
